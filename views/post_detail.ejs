@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title><%= post.title %> - 고객센터</title>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        .header-left { display: flex; align-items: center; gap: 35px; }
+        .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
+        nav { display: flex; gap: 24px; }
+        nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
+        .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
+        .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
+
+        .detail-container { max-width: 800px; margin: 50px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .post-header { border-bottom: 2px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 30px; }
+        .post-title { font-size: 1.8em; font-weight: 800; margin: 0 0 15px 0; color: #111827; }
+        .post-info { display: flex; gap: 20px; color: #6b7280; font-size: 0.9em; }
+        .post-info strong { color: #4b5563; }
+        .post-content { font-size: 1.05em; line-height: 1.7; color: #374151; min-height: 250px; white-space: pre-wrap; }
+        .btn-list { display: inline-block; padding: 12px 24px; background-color: #111827; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; margin-top: 30px; }
+        .btn-list:hover { background-color: #1f2937; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>🌱 프레시 마켓</h1>
+        <nav>
+            <a href="./">홈</a>
+            <a href="./shop/products">추천상품</a>
+            <a href="./shop/products/all">전체상품</a>
+            <a href="./shop/cart">장바구니</a>
+            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+        </nav>
+    </div>
+    <div class="auth-zone">
+        <% if (user) { %>
+            <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
+            <a href="./mypage">마이페이지</a> |
+            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+        <% } else { %>
+            <a href="./login">로그인</a> |
+            <a href="./register">회원가입</a>
+        <% } %>
+    </div>
+</header>
+
+<main>
+    <div class="detail-container">
+        <div class="post-header">
+            <h2 class="post-title"><%= post.title %></h2>
+            <div class="post-info">
+                <span>작성자: <strong><%= post.author %></strong></span>
+                <span>등록일: <strong><%= post.reg_date %></strong></span>
+            </div>
+        </div>
+
+        <div class="post-content"><%= post.content %></div>
+
+        <a href="./post/list" class="btn-list">📋 목록으로 돌아가기</a>
+    </div>
+</main>
+
+</body>
+</html>

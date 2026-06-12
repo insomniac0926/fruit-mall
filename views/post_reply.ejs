@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>답변 달기 - 관리자 모드</title>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f3f4f6; color: #111827; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #e5e7eb; }
+        .header-left { display: flex; align-items: center; gap: 35px; }
+        .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
+        nav { display: flex; align-items: center; gap: 24px; }
+        nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+
+        .reply-container { max-width: 750px; margin: 50px auto; padding: 40px; background: white; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); }
+        .reply-title { font-size: 1.6em; font-weight: 800; color: #111827; border-bottom: 2px solid #f3f4f6; padding-bottom: 15px; margin-bottom: 25px; }
+
+        .origin-post { background-color: #f9fafb; padding: 25px; border-radius: 16px; border: 1px solid #e5e7eb; margin-bottom: 30px; }
+        .origin-header { font-size: 1.15em; font-weight: 700; color: #111827; margin-bottom: 10px; }
+        .origin-content { color: #4b5563; line-height: 1.6; white-space: pre-wrap; font-size: 0.98em; }
+
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; font-size: 0.95em; font-weight: 600; color: #111827; margin-bottom: 8px; }
+        .form-group textarea { width: 100%; box-sizing: border-box; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95em; outline: none; }
+        .form-group textarea:focus { border-color: #10b981; }
+
+        .btn-submit { padding: 14px 28px; background-color: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1em; cursor: pointer; }
+        .btn-submit:hover { background-color: #1d4ed8; }
+        .btn-cancel { display: inline-block; padding: 14px 24px; background-color: #f3f4f6; color: #4b5563; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 1em; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>🌱 프레시 마켓 [관리자]</h1>
+        <nav>
+            <a href="./">홈</a>
+            <a href="./shop/products">추천상품</a>
+            <a href="./shop/products/all">전체상품</a>
+            <a href="./shop/cart">장바구니</a>
+            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+        </nav>
+    </div>
+    <div class="auth-zone">
+        <span style="font-weight: bold; color: #d97706;">👑 마스터 답변 모드</span> |
+        <a href="./admin">대시보드</a> |
+        <a href="./logout" style="color: #ef4444;">로그아웃</a>
+    </div>
+</header>
+
+<main>
+    <div class="reply-container">
+        <h2 class="reply-title">💬 고객 문의 공식 답변 등록</h2>
+
+        <div class="origin-post">
+            <div class="origin-header">📌 원본 문의: <%= post.title %></div>
+            <div class="origin-content"><%= post.content %></div>
+        </div>
+
+        <form action="./post/reply" method="POST">
+            <input type="hidden" name="postId" value="<%= post.id %>">
+            <div class="form-group">
+                <label for="replyContent">공식 답변 기입</label>
+                <textarea id="replyContent" name="replyContent" rows="8" placeholder="고객에게 전달할 공식 답변을 입력하세요" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">답변 등록 완료</button>
+            <a href="./post/list" class="btn-cancel">취소</a>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

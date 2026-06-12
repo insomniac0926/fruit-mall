@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>고객센터 - 프레시 마켓</title>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        .header-left { display: flex; align-items: center; gap: 35px; }
+        .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
+        nav { display: flex; gap: 24px; }
+        nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
+        .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
+        .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
+
+        main { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+        .board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .board-title { font-size: 1.6em; font-weight: 800; color: #111827; margin: 0; }
+        .btn-write { display: inline-block; padding: 12px 24px; background-color: #10b981; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; }
+        .btn-write:hover { background-color: #059669; }
+
+        .board-table { width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 20px; overflow: hidden; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0,0,0,0.01); }
+        .board-table th { background-color: #f9fafb; padding: 16px 20px; font-weight: 600; color: #4b5563; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 0.95em; }
+        .board-table td { padding: 18px 20px; border-bottom: 1px solid #f3f4f6; font-size: 0.95em; color: #111827; }
+        .board-table tr:last-child td { border-bottom: none; }
+
+        .post-link { color: #111827; text-decoration: none; font-weight: 500; }
+        .post-link:hover { color: #10b981; }
+        .reply-badge { color: #2563eb; font-weight: 600; font-size: 0.9em; margin-left: 5px; }
+        .action-links { font-size: 0.85em; display: flex; gap: 10px; }
+        .action-links a { color: #6b7280; text-decoration: none; }
+        .action-links a:hover { color: #111827; }
+        .action-links button { background: none; border: none; padding: 0; color: #ef4444; cursor: pointer; font-size: 1em; font-family: inherit; }
+
+        .empty-board { text-align: center; color: #9ca3af; padding: 60px 0; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>🌱 프레시 마켓</h1>
+        <nav>
+            <a href="./">홈</a>
+            <a href="./shop/products">추천상품</a>
+            <a href="./shop/products/all">전체상품</a>
+            <a href="./shop/cart">장바구니</a>
+            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+        </nav>
+    </div>
+    <div class="auth-zone">
+        <% if (user) { %>
+            <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
+            <a href="./mypage">마이페이지</a> |
+            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+        <% } else { %>
+            <a href="./login">로그인</a> |
+            <a href="./register">회원가입</a>
+        <% } %>
+    </div>
+</header>
+
+<main>
+    <div class="board-header">
+        <h2 class="board-title">💬 1:1 고객 건의 게시판</h2>
+        <a href="./post/write" class="btn-write">✏️ 문의하기</a>
+    </div>
+
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th style="width: 50%;">제목</th>
+            <th style="width: 15%;">작성자</th>
+            <th style="width: 20%;">작성일</th>
+            <th style="width: 15%;">관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (posts && posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+                <tr>
+                    <td>
+                        <a href="./post/detail/<%= post.id %>" class="post-link">
+                            <%= post.title %>
+                            <% if (post.reply_count > 0) { %>
+                                <span class="reply-badge">[답변완료]</span>
+                            <% } %>
+                        </a>
+                    </td>
+                    <td><strong><%= post.author %></strong></td>
+                    <td style="color: #6b7280;"><%= post.reg_date %></td>
+                    <td>
+                        <div class="action-links">
+                            <% if (user && (user.id === 'admin' || user.username === 'admin')) { %>
+                                <a href="./post/reply/<%= post.id %>" style="color: #2563eb; font-weight: 600;">[답변]</a>
+                            <% } %>
+                            <% if (user && (user.id === post.author || user.username === post.author || user.id === 'admin')) { %>
+                                <a href="./post/edit/<%= post.id %>">수정</a>
+                                <form action="./post/delete" method="POST" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                                    <input type="hidden" name="id" value="<%= post.id %>">
+                                    <button type="submit">삭제</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="4" class="empty-board">등록된 문의 내역이 없습니다. 첫 문의를 등록해 보세요!</td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

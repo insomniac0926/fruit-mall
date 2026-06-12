@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>전체 상품 목록 - 프레시 마켓</title>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        .header-left { display: flex; align-items: center; gap: 35px; }
+        .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
+
+        nav { display: flex; gap: 24px; }
+        nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        nav a:hover { color: #10b981; }
+
+        .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
+        .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
+        .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
+
+        main { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+        .section-title { font-size: 1.6em; font-weight: 800; margin-bottom: 30px; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .product-card { background: white; border: 1px solid #e5e7eb; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.01); text-align: center; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-4px); }
+        .fruit-emoji { font-size: 3.5em; margin-bottom: 15px; display: inline-block; }
+        .product-card h3 { margin: 0 0 8px 0; font-size: 1.15em; font-weight: 700; }
+        .product-card p { margin: 0 0 20px 0; font-size: 0.9em; color: #6b7280; line-height: 1.4; }
+        .price-zone { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .price { font-size: 1.2em; font-weight: 800; color: #111827; }
+
+        .btn-cart { background-color: #111827; color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 0.9em; cursor: pointer; }
+        .btn-cart:hover { background-color: #1f2937; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>🌱 프레시 마켓</h1>
+        <nav>
+            <a href="./">홈</a>
+            <a href="./shop/products">추천상품</a>
+            <a href="./shop/products/all" style="color: #10b981; font-weight: 700;">전체상품</a>
+            <a href="./shop/cart">장바구니 (<%= cartCount %>)</a>
+            <a href="./post/list">고객센터</a>
+        </nav>
+    </div>
+    <div class="auth-zone">
+        <% if (user) { %>
+            <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
+            <a href="./mypage">마이페이지</a> |
+            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+        <% } else { %>
+            <a href="./login">로그인</a> |
+            <a href="./register">회원가입</a>
+        <% } %>
+    </div>
+</header>
+
+<main>
+    <div class="section-title">📦 가락시장 당일 입고 전체 상품 리스트</div>
+    <div class="product-grid">
+        <% products.forEach(product => { %>
+            <div class="product-card">
+                <span class="fruit-emoji"><%= product.emoji %></span>
+                <h3><%= product.name %></h3>
+                <p><%= product.description %></p>
+                <div class="price-zone">
+                    <span class="price"><%= product.price.toLocaleString() %>원</span>
+                    <form action="./shop/cart/add" method="POST" style="margin: 0;">
+                        <input type="hidden" name="productId" value="<%= product.id %>">
+                        <button type="submit" class="btn-cart">🛒 담기</button>
+                    </form>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</main>
+
+</body>
+</html>

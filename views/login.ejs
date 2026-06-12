@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 - 프레시 마켓</title>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .login-container { width: 100%; max-width: 420px; background-color: #ffffff; padding: 40px; border-radius: 24px; border: 1px solid #e5e7eb; box-shadow: 0 4px 15px rgba(0,0,0,0.02); box-sizing: border-box; }
+        .login-logo { font-size: 1.6em; font-weight: 800; color: #10b981; text-align: center; margin-bottom: 30px; text-decoration: none; display: block; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.9em; font-weight: 600; color: #4b5563; margin-bottom: 8px; }
+        .form-group input { width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95em; outline: none; }
+        .form-group input:focus { border-color: #10b981; }
+        .btn-login { width: 100%; padding: 14px; background-color: #10b981; color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1em; cursor: pointer; margin-top: 10px; }
+        .btn-login:hover { background-color: #059669; }
+        .auth-links { text-align: center; margin-top: 25px; font-size: 0.9em; color: #6b7280; }
+        .auth-links a { color: #4b5563; text-decoration: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <a href="./" class="login-logo">🌱 프레시 마켓</a>
+
+    <form action="./login" method="POST">
+        <div class="form-group">
+            <label for="username">아이디</label>
+            <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
+        </div>
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+        </div>
+        <button type="submit" class="btn-login">로그인</button>
+    </form>
+
+    <div class="auth-links">
+        계정이 없으신가요? <a href="./register">회원가입</a>
+    </div>
+</div>
+
+</body>
+</html>
