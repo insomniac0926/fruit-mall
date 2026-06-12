@@ -3,24 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>마이페이지 - 프레시 마켓</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; box-sizing: border-box; }
         .header-left { display: flex; align-items: center; gap: 35px; }
         .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
-        nav { display: flex; gap: 24px; }
+        nav { display: flex; gap: 24px; align-items: center; }
         nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        nav a:hover { color: #10b981; }
         .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
         .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
         .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
 
-        .mypage-container { max-width: 600px; margin: 60px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .mypage-title { font-size: 1.6em; font-weight: 800; color: #111827; border-bottom: 2px solid #f3f4f6; padding-bottom: 15px; margin-bottom: 30px; }
-        .info-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid #f9fafb; font-size: 1em; }
-        .info-label { color: #4b5563; font-weight: 600; }
-        .info-value { color: #111827; font-weight: 700; }
-        .btn-home { display: block; text-align: center; width: 100%; box-sizing: border-box; padding: 14px; background-color: #10b981; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; margin-top: 30px; }
+        .mypage-container { max-width: 500px; margin: 60px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); box-sizing: border-box; }
+        /* 👑 요청대로 제목 깔끔하게 단축 */
+        .mypage-title { font-size: 1.6em; font-weight: 800; margin-bottom: 25px; text-align: center; color: #111827; }
+
+        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f3f4f6; margin-bottom: 25px; }
+        .info-label { font-weight: 600; color: #4b5563; }
+        .info-value { font-weight: 700; color: #10b981; font-size: 1.1em; }
+
+        /* 👑 비밀번호 변경 영역 스타일 */
+        .pwd-section { background-color: #f9fafb; padding: 25px; border-radius: 16px; border: 1px solid #f3f4f6; margin-bottom: 25px; }
+        .pwd-section h3 { margin: 0 0 15px 0; font-size: 1.05em; font-weight: 700; color: #1f2937; }
+        .form-group { margin-bottom: 12px; }
+        .form-group input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 0.9em; outline: none; }
+        .form-group input:focus { border-color: #10b981; }
+
+        .btn-action { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-size: 1em; cursor: pointer; text-align: center; text-decoration: none; display: block; box-sizing: border-box; transition: background 0.2s; }
+        .btn-pwd { background-color: #111827; color: white; margin-top: 5px; }
+        .btn-pwd:hover { background-color: #1f2937; }
+        .btn-home { background-color: #10b981; color: white; margin-top: 12px; }
         .btn-home:hover { background-color: #059669; }
     </style>
 </head>
@@ -30,42 +44,51 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="./">홈</a>
-            <a href="./shop/products">추천상품</a>
-            <a href="./shop/products/all">전체상품</a>
-            <a href="./shop/cart">장바구니</a>
-            <a href="./post/list">고객센터</a>
+            <a href="/">홈</a>
+            <a href="/shop/products">추천상품</a>
+            <a href="/shop/products/all">전체상품</a>
+            <a href="/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : 0 %>)</a>
+            <a href="/post/list">고객센터</a>
+            <% if (user && (user.id === 'admin' || user.username === 'admin')) { %>
+                <a href="/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+            <% } %>
         </nav>
     </div>
     <div class="auth-zone">
         <% if (user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
-            <a href="./mypage" style="color: #10b981; font-weight: 700;">마이페이지</a> |
-            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/mypage" style="color: #10b981; font-weight: 700;">마이페이지</a> |
+            <a href="/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="./login">로그인</a> |
-            <a href="./register">회원가입</a>
+            <a href="/login">로그인</a> |
+            <a href="/register">회원가입</a>
         <% } %>
     </div>
 </header>
 
 <main>
     <div class="mypage-container">
-        <h2 class="mypage-title">👤 마이페이지 정보 조회</h2>
+        <div class="mypage-title">👤 마이페이지</div>
+
         <div class="info-row">
             <span class="info-label">고객 고유 번호 (ID)</span>
-            <span class="info-value" style="color: #10b981;"><%= user.id %></span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">사용자 이름 (Username)</span>
-            <span class="info-value"><%= user.username || '미지정' %></span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">가입 상태</span>
-            <span class="info-value" style="background-color: #eff6ff; color: #2563eb; padding: 2px 8px; border-radius: 12px; font-size: 0.85em;">정상 활성 회원</span>
+            <span class="info-value"><%= user.id || user.username %></span>
         </div>
 
-        <a href="./" class="btn-home">쇼핑몰 메인으로 돌아가기</a>
+        <div class="pwd-section">
+            <h3>🔒 비밀번호 변경</h3>
+            <form action="/mypage/change-password" method="POST" onsubmit="return confirm('비밀번호를 변경하시겠습니까?');">
+                <div class="form-group">
+                    <input type="password" name="currentPassword" placeholder="현재 비밀번호 입력" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="newPassword" placeholder="새로운 비밀번호 입력" required>
+                </div>
+                <button type="submit" class="btn-action btn-pwd">새 비밀번호로 변경하기</button>
+            </form>
+        </div>
+
+        <a href="/" class="btn-action btn-home">쇼핑몰 메인으로 돌아가기</a>
     </div>
 </main>
 

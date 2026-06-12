@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>문의하기 - 고객센터</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
@@ -32,21 +32,21 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="./">홈</a>
-            <a href="./shop/products">추천상품</a>
-            <a href="./shop/products/all">전체상품</a>
-            <a href="./shop/cart">장바구니</a>
-            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+            <a href="/">홈</a>
+            <a href="/shop/products">추천상품</a>
+            <a href="/shop/products/all">전체상품</a>
+            <a href="/shop/cart">장바구니</a>
+            <a href="/post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
         </nav>
     </div>
     <div class="auth-zone">
         <% if (user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
-            <a href="./mypage">마이페이지</a> |
-            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/mypage">마이페이지</a> |
+            <a href="/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="./login">로그인</a> |
-            <a href="./register">회원가입</a>
+            <a href="/login">로그인</a> |
+            <a href="/register">회원가입</a>
         <% } %>
     </div>
 </header>
@@ -55,7 +55,7 @@
     <div class="write-container">
         <h2 class="write-title">📝 1:1 고객 문의 작성</h2>
 
-        <form action="./post/write" method="POST">
+        <form action="/post/write" method="POST">
             <div class="form-group">
                 <label for="title">문의 제목</label>
                 <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
@@ -65,7 +65,7 @@
                 <textarea id="content" name="content" rows="10" placeholder="내용을 상세히 입력해 주세요" required></textarea>
             </div>
             <button type="submit" class="btn-submit">등록하기</button>
-            <a href="./post/list" class="btn-cancel">취소</a>
+            <a href="/post/list" class="btn-cancel">취소</a>
         </form>
     </div>
 </main>

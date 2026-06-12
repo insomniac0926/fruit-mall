@@ -10,9 +10,13 @@ const db = new sqlite3.Database(dbPath);
 router.get('/products', (req, res) => {
     db.all('SELECT * FROM products WHERE is_featured = 1', [], (err, rows) => {
         if (err) return res.status(500).send('추천 상품 로드 실패');
+
+        // admin 대시보드 탭 노출을 위한 세션 체크 변수
+        const user = req.session.user || null;
+
         res.render('shop_list', {
             products: rows || [],
-            user: req.session.user || null,
+            user: user,
             cartCount: req.session.cartItems ? req.session.cartItems.length : 0
         });
     });
@@ -22,9 +26,12 @@ router.get('/products', (req, res) => {
 router.get('/products/all', (req, res) => {
     db.all('SELECT * FROM products', [], (err, rows) => {
         if (err) return res.status(500).send('전체 상품 로드 실패');
+
+        const user = req.session.user || null;
+
         res.render('shop_list_all', {
             products: rows || [],
-            user: req.session.user || null,
+            user: user,
             cartCount: req.session.cartItems ? req.session.cartItems.length : 0
         });
     });
@@ -48,7 +55,7 @@ router.post('/cart/add', (req, res) => {
     });
 });
 
-// 4. 장바구니 페이지 이동 (모던 디자인 HTML 내장형)
+// 4. 장바구니 페이지 이동 (내장형 HTML 내 관리자 마스터 탭 완벽 연동)
 router.get('/cart', (req, res) => {
     const cartItems = req.session.cartItems || [];
     const cartCount = cartItems.length;
@@ -68,6 +75,12 @@ router.get('/cart', (req, res) => {
         itemsHtml += '</div>';
     }
 
+    // 👑 로그인한 유저가 admin일 때만 헤더 내비게이션에 꽂아줄 코드 생성
+    let adminTabHtml = '';
+    if (user && (user.id === 'admin' || user.username === 'admin')) {
+        adminTabHtml = '<a href="/admin" style="color: #ef4444; font-weight: 700; text-decoration: none; font-size: 0.95em;">👑 관리자 대시보드</a>';
+    }
+
     res.send(`
         <!DOCTYPE html>
         <html lang="ko">
@@ -80,7 +93,7 @@ router.get('/cart', (req, res) => {
                 header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
                 .header-left { display: flex; align-items: center; gap: 35px; }
                 .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
-                nav { display: flex; gap: 24px; }
+                nav { display: flex; gap: 24px; align-items: center; }
                 nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
                 .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
                 .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
@@ -95,7 +108,13 @@ router.get('/cart', (req, res) => {
         <header>
             <div class="header-left">
                 <h1>🌱 프레시 마켓</h1>
-                <nav><a href="/">홈</a><a href="/shop/products">추천상품</a><a href="/shop/products/all">전체상품</a><a href="/shop/cart" style="color: #10b981; font-weight: 700;">장바구니 (${cartCount})</a><a href="/post/list">고객센터</a></nav>
+                <nav>
+                    <a href="/">홈</a>
+                    <a href="/shop/products">추천상품</a>
+                    <a href="/shop/products/all">전체상품</a>
+                    <a href="/shop/cart" style="color: #10b981; font-weight: 700;">장바구니 (${cartCount})</a>
+                    <a href="/post/list">고객센터</a>
+                    ${adminTabHtml} </nav>
             </div>
             <div class="auth-zone">
                 ${user ? `<span class="user-tag">👤 ${user.id}님</span> | <a href="/mypage">마이페이지</a> | <a href="/logout" style="color: #ef4444;">로그아웃</a>` : `<a href="/login">로그인</a> | <a href="/register">회원가입</a>`}
@@ -136,7 +155,6 @@ router.post('/checkout', (req, res) => {
     const orderNumber = 'FRUIT-' + Math.floor(100000 + Math.random() * 900000);
     const username = user ? user.id : '비회원 고객';
 
-    // 🚨 관리자가 대시보드에서 가로챌 수 있게 DB에 주문 저장!
     db.run('INSERT INTO orders (order_number, username, total_price, status) VALUES (?, ?, ?, "배송준비중")',
         [orderNumber, username, totalPrice], (err) => {
             if (err) console.error("주문 DB 저장 실패:", err);

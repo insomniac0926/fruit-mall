@@ -3,26 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title><%= post.title %> - 고객센터</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; box-sizing: border-box; }
         .header-left { display: flex; align-items: center; gap: 35px; }
         .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
         nav { display: flex; gap: 24px; }
         nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        nav a:hover { color: #10b981; }
         .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
         .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
         .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
 
-        .detail-container { max-width: 800px; margin: 50px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .detail-container { max-width: 800px; margin: 50px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); box-sizing: border-box; }
         .post-header { border-bottom: 2px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 30px; }
         .post-title { font-size: 1.8em; font-weight: 800; margin: 0 0 15px 0; color: #111827; }
         .post-info { display: flex; gap: 20px; color: #6b7280; font-size: 0.9em; }
         .post-info strong { color: #4b5563; }
         .post-content { font-size: 1.05em; line-height: 1.7; color: #374151; min-height: 250px; white-space: pre-wrap; }
-        .btn-list { display: inline-block; padding: 12px 24px; background-color: #111827; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; margin-top: 30px; }
+
+        /* 버튼 정렬 영역 */
+        .btn-zone { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .btn-left { display: flex; gap: 10px; }
+        .btn-list { display: inline-block; padding: 12px 24px; background-color: #111827; color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; }
         .btn-list:hover { background-color: #1f2937; }
+
+        .btn-edit { display: inline-block; padding: 12px 24px; background-color: #f3f4f6; color: #4b5563; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; transition: all 0.2s; }
+        .btn-edit:hover { background-color: #e5e7eb; color: #111827; }
+
+        .btn-delete { padding: 12px 24px; background-color: #fee2e2; color: #ef4444; border: none; border-radius: 12px; font-weight: 600; font-size: 0.95em; cursor: pointer; transition: all 0.2s; }
+        .btn-delete:hover { background-color: #ef4444; color: white; }
     </style>
 </head>
 <body>
@@ -31,21 +42,25 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="./">홈</a>
-            <a href="./shop/products">추천상품</a>
-            <a href="./shop/products/all">전체상품</a>
-            <a href="./shop/cart">장바구니</a>
-            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+            <a href="/">홈</a>
+            <a href="/shop/products">추천상품</a>
+            <a href="/shop/products/all">전체상품</a>
+            <a href="/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : (typeof cartItems !== 'undefined' ? cartItems.length : 0) %>)</a>
+            <a href="/post/list">고객센터</a>
+
+            <% if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { %>
+                <a href="/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+            <% } %>
         </nav>
     </div>
     <div class="auth-zone">
         <% if (user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
-            <a href="./mypage">마이페이지</a> |
-            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/mypage">마이페이지</a> |
+            <a href="/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="./login">로그인</a> |
-            <a href="./register">회원가입</a>
+            <a href="/login">로그인</a> |
+            <a href="/register">회원가입</a>
         <% } %>
     </div>
 </header>
@@ -62,7 +77,22 @@
 
         <div class="post-content"><%= post.content %></div>
 
-        <a href="./post/list" class="btn-list">📋 목록으로 돌아가기</a>
+        <div class="btn-zone">
+            <div class="btn-left">
+                <a href="/post/list" class="btn-list">📋 목록으로 돌아가기</a>
+
+                <% if (user && (user.username === post.author || user.id === post.author)) { %>
+                    <a href="/post/edit/<%= post.id %>" class="btn-edit">✏️ 문의 수정</a>
+                <% } %>
+            </div>
+
+            <% if (user && (user.username === post.author || user.id === post.author || user.username === 'admin' || user.id === 'admin')) { %>
+                <form action="/post/delete" method="POST" style="margin: 0;" onsubmit="return confirm('정말 이 문의 글을 삭제하시겠습니까?');">
+                    <input type="hidden" name="id" value="<%= post.id %>">
+                    <button type="submit" class="btn-delete">🗑️ 문의 삭제하기</button>
+                </form>
+            <% } %>
+        </div>
     </div>
 </main>
 

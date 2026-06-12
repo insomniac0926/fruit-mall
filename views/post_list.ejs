@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>고객센터 - 프레시 마켓</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
@@ -33,7 +33,6 @@
         .action-links a { color: #6b7280; text-decoration: none; }
         .action-links a:hover { color: #111827; }
         .action-links button { background: none; border: none; padding: 0; color: #ef4444; cursor: pointer; font-size: 1em; font-family: inherit; }
-
         .empty-board { text-align: center; color: #9ca3af; padding: 60px 0; }
     </style>
 </head>
@@ -43,29 +42,33 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="./">홈</a>
-            <a href="./shop/products">추천상품</a>
-            <a href="./shop/products/all">전체상품</a>
-            <a href="./shop/cart">장바구니</a>
-            <a href="./post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+            <a href="/">홈</a>
+            <a href="/shop/products">추천상품</a>
+            <a href="/shop/products/all">전체상품</a>
+            <a href="/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : (typeof cartItems !== 'undefined' ? cartItems.length : 0) %>)</a>
+            <a href="/post/list">고객센터</a>
+
+            <% if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { %>
+                <a href="/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+            <% } %>
         </nav>
     </div>
     <div class="auth-zone">
         <% if (user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
-            <a href="./mypage">마이페이지</a> |
-            <a href="./logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/mypage">마이페이지</a> |
+            <a href="/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="./login">로그인</a> |
-            <a href="./register">회원가입</a>
+            <a href="/login">로그인</a> |
+            <a href="/register">회원가입</a>
         <% } %>
     </div>
 </header>
 
 <main>
     <div class="board-header">
-        <h2 class="board-title">💬 1:1 고객 건의 게시판</h2>
-        <a href="./post/write" class="btn-write">✏️ 문의하기</a>
+        <h2 class="board-title">💬 고객센터</h2>
+        <a href="/post/write" class="btn-write">✏️ 문의하기</a>
     </div>
 
     <table class="board-table">
@@ -82,7 +85,7 @@
             <% posts.forEach(post => { %>
                 <tr>
                     <td>
-                        <a href="./post/detail/<%= post.id %>" class="post-link">
+                        <a href="/post/detail/<%= post.id %>" class="post-link">
                             <%= post.title %>
                             <% if (post.reply_count > 0) { %>
                                 <span class="reply-badge">[답변완료]</span>
@@ -94,11 +97,11 @@
                     <td>
                         <div class="action-links">
                             <% if (user && (user.id === 'admin' || user.username === 'admin')) { %>
-                                <a href="./post/reply/<%= post.id %>" style="color: #2563eb; font-weight: 600;">[답변]</a>
+                                <a href="/post/reply/<%= post.id %>" style="color: #2563eb; font-weight: 600;">[답변]</a>
                             <% } %>
                             <% if (user && (user.id === post.author || user.username === post.author || user.id === 'admin')) { %>
-                                <a href="./post/edit/<%= post.id %>">수정</a>
-                                <form action="./post/delete" method="POST" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                                <a href="/post/edit/<%= post.id %>">수정</a>
+                                <form action="/post/delete" method="POST" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
                                     <input type="hidden" name="id" value="<%= post.id %>">
                                     <button type="submit">삭제</button>
                                 </form>

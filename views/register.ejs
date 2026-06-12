@@ -3,42 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 - 프레시 마켓</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
-        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .register-container { width: 100%; max-width: 440px; background-color: #ffffff; padding: 40px; border-radius: 24px; border: 1px solid #e5e7eb; box-shadow: 0 4px 15px rgba(0,0,0,0.02); box-sizing: border-box; }
-        .register-logo { font-size: 1.6em; font-weight: 800; color: #10b981; text-align: center; margin-bottom: 30px; text-decoration: none; display: block; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 0.9em; font-weight: 600; color: #4b5563; margin-bottom: 8px; }
-        .form-group input { width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95em; outline: none; }
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
+
+        /* 👑 다른 페이지들과 100% 일치시킨 상단 헤더 스타일 */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; box-sizing: border-box; }
+        .header-left { display: flex; align-items: center; gap: 35px; }
+        .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
+        nav { display: flex; gap: 24px; align-items: center; }
+        nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
+        nav a:hover { color: #10b981; }
+        .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
+        .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
+
+        /* 회원가입 폼 컨테이너 */
+        .register-container { max-width: 450px; margin: 60px auto; padding: 40px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); box-sizing: border-box; }
+        .register-title { font-size: 1.6em; font-weight: 800; margin-bottom: 25px; text-align: center; color: #111827; }
+
+        .form-group { margin-bottom: 18px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #4b5563; font-size: 0.9em; }
+        .form-group input { width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 0.95em; outline: none; transition: border-color 0.2s; }
         .form-group input:focus { border-color: #10b981; }
-        .btn-register { width: 100%; padding: 14px; background-color: #10b981; color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1em; cursor: pointer; margin-top: 10px; }
+
+        .btn-register { width: 100%; padding: 14px; background-color: #10b981; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1.05em; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
         .btn-register:hover { background-color: #059669; }
-        .auth-links { text-align: center; margin-top: 25px; font-size: 0.9em; color: #6b7280; }
-        .auth-links a { color: #4b5563; text-decoration: none; font-weight: 500; }
+
+        .link-login { display: block; text-align: center; margin-top: 20px; color: #6b7280; text-decoration: none; font-size: 0.9em; }
+        .link-login:hover { text-decoration: underline; color: #10b981; }
     </style>
 </head>
 <body>
 
-<div class="register-container">
-    <a href="./" class="register-logo">🌱 프레시 마켓</a>
-
-    <form action="./register" method="POST">
-        <div class="form-group">
-            <label for="username">희망 아이디 (ID)</label>
-            <input type="text" id="username" name="username" placeholder="사용할 아이디를 입력하세요" required>
-        </div>
-        <div class="form-group">
-            <label for="password">비밀번호 (Password)</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호를 기입하세요" required>
-        </div>
-        <button type="submit" class="btn-register">신규 회원가입 등록</button>
-    </form>
-
-    <div class="auth-links">
-        이미 계정이 있으신가요? <a href="./login">로그인하기</a>
+<header>
+    <div class="header-left">
+        <h1>🌱 프레시 마켓</h1>
+        <nav>
+            <a href="/">홈</a>
+            <a href="/shop/products">추천상품</a>
+            <a href="/shop/products/all">전체상품</a>
+            <a href="/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : 0 %>)</a>
+            <a href="/post/list">고객센터</a>
+        </nav>
     </div>
-</div>
+    <div class="auth-zone">
+        <a href="/login">로그인</a> |
+        <a href="/register" style="color: #10b981; font-weight: 700;">회원가입</a>
+    </div>
+</header>
+
+<main>
+    <div class="register-container">
+        <div class="register-title">📝 회원가입</div>
+
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label for="id">아이디</label>
+                <input type="text" id="id" name="id" placeholder="사용할 아이디를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <button type="submit" class="btn-register">🌱 가입 완료하기</button>
+        </form>
+
+        <a href="/login" class="link-login">이미 계정이 있으신가요? 로그인하기</a>
+    </div>
+</main>
 
 </body>
 </html>
