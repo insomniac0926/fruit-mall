@@ -7,12 +7,12 @@ const router = express.Router();
 const dbPath = path.join(__dirname, '../db/database.sqlite');
 const db = new sqlite3.Database(dbPath);
 
-// [PPT 6쪽] 회원가입 페이지
+// 회원가입 페이지
 router.get('/register', (req, res) => {
     res.render('register');
 });
 
-// [PPT 6쪽] 회원가입 처리
+// 회원가입 처리
 router.post('/register', async (req, res) => {
     const { username, password, name } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
                 console.error(err.message);
                 return res.send('회원가입 실패');
             }
-            res.redirect('/user/login');
+            res.redirect('/stud11/user/login');
         }
     );
 });
@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
         const match = await bcrypt.compare(password, user.password);
         if (match) {
             req.session.user = user;
-            res.redirect('/');
+            res.redirect('/stud11/');
         } else {
             res.send('비밀번호가 일치하지 않습니다.');
         }
@@ -54,7 +54,7 @@ router.post('/login', (req, res) => {
 // [PPT 7쪽] 로그아웃
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('/stud11/');
 });
 
 module.exports = router;

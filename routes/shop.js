@@ -78,7 +78,7 @@ router.get('/cart', (req, res) => {
     // 👑 로그인한 유저가 admin일 때만 헤더 내비게이션에 꽂아줄 코드 생성
     let adminTabHtml = '';
     if (user && (user.id === 'admin' || user.username === 'admin')) {
-        adminTabHtml = '<a href="/admin" style="color: #ef4444; font-weight: 700; text-decoration: none; font-size: 0.95em;">👑 관리자 대시보드</a>';
+        adminTabHtml = '<a href="/stud11/admin" style="color: #ef4444; font-weight: 700; text-decoration: none; font-size: 0.95em;">👑 관리자 대시보드</a>';
     }
 
     res.send(`
@@ -87,7 +87,7 @@ router.get('/cart', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <title>장바구니 - 프레시 마켓</title>
-            <link rel="stylesheet" href="/stylesheets/style.css">
+            <link rel="stylesheet" href="/stud11/stylesheets/style.css">
             <style>
                 body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
                 header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
@@ -109,15 +109,15 @@ router.get('/cart', (req, res) => {
             <div class="header-left">
                 <h1>🌱 프레시 마켓</h1>
                 <nav>
-                    <a href="/">홈</a>
-                    <a href="/shop/products">추천상품</a>
-                    <a href="/shop/products/all">전체상품</a>
-                    <a href="/shop/cart" style="color: #10b981; font-weight: 700;">장바구니 (${cartCount})</a>
-                    <a href="/post/list">고객센터</a>
+                    <a href="/stud11/">홈</a>
+                    <a href="/stud11/shop/products">추천상품</a>
+                    <a href="/stud11/shop/products/all">전체상품</a>
+                    <a href="/stud11/shop/cart" style="color: #10b981; font-weight: 700;">장바구니 (${cartCount})</a>
+                    <a href="/stud11/post/list">고객센터</a>
                     ${adminTabHtml} </nav>
             </div>
             <div class="auth-zone">
-                ${user ? `<span class="user-tag">👤 ${user.id}님</span> | <a href="/mypage">마이페이지</a> | <a href="/logout" style="color: #ef4444;">로그아웃</a>` : `<a href="/login">로그인</a> | <a href="/register">회원가입</a>`}
+                ${user ? `<span class="user-tag">👤 ${user.id}님</span> | <a href="/stud11/mypage">마이페이지</a> | <a href="/stud11/logout" style="color: #ef4444;">로그아웃</a>` : `<a href="/stud11/login">로그인</a> | <a href="/stud11/register">회원가입</a>`}
             </div>
         </header>
         <main>
@@ -129,11 +129,11 @@ router.get('/cart', (req, res) => {
                         <span style="font-size: 1.1em; font-weight: 700; color: #4b5563;">최종 합계 금액</span>
                         <span style="font-size: 1.7em; font-weight: 800; color: #111827;">${totalPrice.toLocaleString()}원</span>
                     </div>
-                    <form action="/shop/checkout" method="POST">
+                    <form action="/stud11/shop/checkout" method="POST">
                         <button type="submit" class="btn-checkout">💳 안전하게 결제하기</button>
                     </form>
                 ` : `<p style="color: #9ca3af; margin: 40px 0;">장바구니가 비어 있습니다.</p>`}
-                <a href="/shop/products/all" class="link-back">쇼핑 계속하기</a>
+                <a href="/stud11/shop/products/all" class="link-back">쇼핑 계속하기</a>
             </div>
         </main>
         </body>
@@ -149,7 +149,7 @@ router.post('/checkout', (req, res) => {
     const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
 
     if (cartCount === 0) {
-        return res.send('<script>alert("장바구니가 비어있습니다."); location.href="/shop/products/all";</script>');
+        return res.send('<script>alert("장바구니가 비어있습니다."); location.href="/stud11/shop/products/all";</script>');
     }
 
     const orderNumber = 'FRUIT-' + Math.floor(100000 + Math.random() * 900000);
@@ -167,7 +167,7 @@ router.post('/checkout', (req, res) => {
                 <head>
                     <meta charset="UTF-8">
                     <title>주문 완료 - 프레시 마켓</title>
-                    <link rel="stylesheet" href="/stylesheets/style.css">
+                    <link rel="stylesheet" href="/stud11/stylesheets/style.css">
                     <style>
                         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
                         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
@@ -192,7 +192,7 @@ router.post('/checkout', (req, res) => {
                             <span style="color: #10b981;">최종 결제 금액</span>
                             <span>${totalPrice.toLocaleString()}원</span>
                         </div>
-                        <a href="/" class="btn-home">메인으로 이동하기</a>
+                        <a href="/stud11/" class="btn-home">메인으로 이동하기</a>
                     </div>
                 </main>
                 </body>

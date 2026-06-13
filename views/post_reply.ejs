@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>답변 달기 - 관리자 모드</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stud11/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f3f4f6; color: #111827; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #e5e7eb; }
@@ -35,17 +35,17 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓 [관리자]</h1>
         <nav>
-            <a href="/">홈</a>
-            <a href="/shop/products">추천상품</a>
-            <a href="/shop/products/all">전체상품</a>
-            <a href="/shop/cart">장바구니</a>
-            <a href="/post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
+            <a href="/stud11/">홈</a>
+            <a href="/stud11/shop/products">추천상품</a>
+            <a href="/stud11/shop/products/all">전체상품</a>
+            <a href="/stud11/shop/cart">장바구니</a>
+            <a href="/stud11/post/list" style="color: #10b981; font-weight: 700;">고객센터</a>
         </nav>
     </div>
     <div class="auth-zone">
         <span style="font-weight: bold; color: #d97706;">👑 마스터 답변 모드</span> |
-        <a href="/admin">대시보드</a> |
-        <a href="/logout" style="color: #ef4444;">로그아웃</a>
+        <a href="/stud11/admin">대시보드</a> |
+        <a href="/stud11/logout" style="color: #ef4444;">로그아웃</a>
     </div>
 </header>
 
@@ -58,14 +58,14 @@
             <div class="origin-content"><%= post.content %></div>
         </div>
 
-        <form action="/post/reply" method="POST">
+        <form action="/stud11/post/reply" method="POST">
             <input type="hidden" name="postId" value="<%= post.id %>">
             <div class="form-group">
                 <label for="replyContent">공식 답변 기입</label>
                 <textarea id="replyContent" name="replyContent" rows="8" placeholder="고객에게 전달할 공식 답변을 입력하세요" required></textarea>
             </div>
             <button type="submit" class="btn-submit">답변 등록 완료</button>
-            <a href="/post/list" class="btn-cancel">취소</a>
+            <a href="/stud11/post/list" class="btn-cancel">취소</a>
         </form>
     </div>
 </main>

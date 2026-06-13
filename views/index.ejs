@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>프레시 마켓</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stud11/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
@@ -38,14 +38,14 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="/">홈</a>
-            <a href="/shop/products">추천상품</a>
-            <a href="/shop/products/all">전체상품</a>
-            <a href="/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : (typeof cartItems !== 'undefined' ? cartItems.length : 0) %>)</a>
-            <a href="/post/list">고객센터</a>
+            <a href="/stud11/">홈</a>
+            <a href="/stud11/shop/products">추천상품</a>
+            <a href="/stud11/shop/products/all">전체상품</a>
+            <a href="/stud11/shop/cart">장바구니 (<%= typeof cartCount !== 'undefined' ? cartCount : (typeof cartItems !== 'undefined' ? cartItems.length : 0) %>)</a>
+            <a href="/stud11/post/list">고객센터</a>
 
             <% if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { %>
-                <a href="/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+                <a href="/stud11/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
             <% } %>
         </nav>
     </div>
@@ -53,13 +53,13 @@
         <% if (typeof user !== 'undefined' && user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span>
             <span style="color: #e5e7eb;">|</span>
-            <a href="/mypage">마이페이지</a>
+            <a href="/stud11/mypage">마이페이지</a>
             <span style="color: #e5e7eb;">|</span>
-            <a href="/logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/stud11/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="/login">로그인</a>
+            <a href="/stud11/login">로그인</a>
             <span style="color: #e5e7eb;">|</span>
-            <a href="/register">회원가입</a>
+            <a href="/stud11/register">회원가입</a>
         <% } %>
     </div>
 </header>
@@ -77,8 +77,8 @@
             중간 유통 없이 농가의 정성을 당일 입고를 통해 빠르게 전해드립니다.<br>
             지금 프레시 마켓에서 확인해 보세요.        </p>
         <div class="cta-box">
-            <a href="/shop/products/all" class="btn-primary">📦 전체 상품 보러가기</a>
-            <a href="/shop/products" class="btn-secondary">✨ MD 추천 상품</a>
+            <a href="/stud11/shop/products/all" class="btn-primary">📦 전체 상품 보러가기</a>
+            <a href="/stud11/shop/products" class="btn-secondary">✨ MD 추천 상품</a>
         </div>
     </div>
 </main>

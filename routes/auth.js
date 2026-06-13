@@ -54,7 +54,8 @@ router.post('/login', (req, res) => {
         if (row.password !== password) return res.send('<script>alert("비밀번호가 일치하지 않습니다."); history.back();</script>');
 
         req.session.user = { id: row.id, password: row.password };
-        return res.send('<script>alert("로그인 성공!"); location.href="/";</script>');
+        // ⭕ 로그인 성공 후 메인 이동 경로 수정
+        return res.send('<script>alert("로그인 성공!"); location.href="/stud11/";</script>');
     });
 });
 
@@ -69,20 +70,22 @@ router.post('/register', (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.send('<script>alert("아이디와 비밀번호를 모두 입력해주세요."); history.back();</script>');
 
-    db.get('SELECT id FROM users WHERE id = ?', [username], (err, row) => {
+    db.get('id FROM users WHERE id = ?', [username], (err, row) => {
         if (err) return res.send('<script>alert("회원검증 중 오류가 발생했습니다."); history.back();</script>');
         if (row) return res.send('<script>alert("이미 존재하는 아이디입니다. 다른 아이디를 사용해주세요."); history.back();</script>');
 
         db.run('INSERT INTO users (id, password) VALUES (?, ?)', [username, password], (err) => {
             if (err) return res.send('<script>alert("회원가입 등록 실패"); history.back();</script>');
-            return res.send(`<script>alert("${username}님 회원가입이 완료되었습니다! 로그인해주세요."); location.href="/login";</script>`);
+            // ⭕ 회원가입 완료 후 로그인 페이지 이동 경로 수정
+            return res.send(`<script>alert("${username}님 회원가입이 완료되었습니다! 로그인해주세요."); location.href="/stud11/login";</script>`);
         });
     });
 });
 
 // 5. 마이페이지 화면 띄우기
 router.get('/mypage', (req, res) => {
-    if (!req.session.user) return res.send('<script>alert("로그인이 필요합니다."); location.href="/login";</script>');
+    // ⭕ 로그인 안 되어 있을 때 로그인 페이지 유도 경로 수정
+    if (!req.session.user) return res.send('<script>alert("로그인이 필요합니다."); location.href="/stud11/login";</script>');
     const cartCount = req.session.cartItems ? req.session.cartItems.length : 0;
     res.render('mypage', { user: req.session.user, cartCount: cartCount });
 });
@@ -90,20 +93,23 @@ router.get('/mypage', (req, res) => {
 // 6. 비밀번호 변경
 router.post('/mypage/change-password', (req, res) => {
     const { currentPassword, newPassword } = req.body;
-    if (!req.session.user) return res.send('<script>alert("세션이 만료되었습니다. 다시 로그인해주세요."); location.href="/login";</script>');
+    // ⭕ 세션 만료 시 로그인 페이지 유도 경로 수정
+    if (!req.session.user) return res.send('<script>alert("세션이 만료되었습니다. 다시 로그인해주세요."); location.href="/stud11/login";</script>');
     if (req.session.user.password !== currentPassword) return res.send('<script>alert("현재 비밀번호가 일치하지 않습니다. 다시 확인해주세요."); history.back();</script>');
 
     db.run('UPDATE users SET password = ? WHERE id = ?', [newPassword, req.session.user.id], (err) => {
         if (err) return res.send('<script>alert("비밀번호 변경 실패"); history.back();</script>');
         req.session.user.password = newPassword;
-        return res.send('<script>alert("비밀번호가 안전하게 변경되었습니다!"); location.href="/mypage";</script>');
+        // ⭕ 비밀번호 변경 완료 후 마이페이지 새로고침 경로 수정
+        return res.send('<script>alert("비밀번호가 안전하게 변경되었습니다!"); location.href="/stud11/mypage";</script>');
     });
 });
 
-// 7. 🔓 로그아웃 처리 (요청대로 뒤에 붙던 사족 다 빼고 깔끔하게 단독 알림창으로 변경)
+// 7. 🔓 로그아웃 처리
 router.get('/logout', (req, res) => {
     req.session.destroy(() => {
-        res.send('<script>alert("로그아웃 되었습니다."); location.href="/";</script>');
+        // ⭕ 로그아웃 후 메인 이동 경로 수정
+        res.send('<script>alert("로그아웃 되었습니다."); location.href="/stud11/";</script>');
     });
 });
 

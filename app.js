@@ -22,8 +22,6 @@ db.serialize(() => {
         reg_date DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    // 🛠️ [🚨 에러 원인 정밀 수리 완료]
-    // 기존 INSERT 구문을 중복 무시 문법인 'INSERT OR IGNORE'로 고정하여 UNIQUE constraint failed 에러를 영구 소멸시킵니다.
     db.get('SELECT * FROM users WHERE username = "admin" OR id = "admin"', [], (err, row) => {
         if (!row) {
             db.run('INSERT OR IGNORE INTO users (username, password) VALUES ("admin", "1234")', (err) => {
@@ -57,18 +55,23 @@ const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const adminRouter = require('./routes/admin');
 
-// 🚨 라우터 주소 등록 구역
-app.use('/', indexRouter);
-app.use('/shop', shopRouter);
-app.use('/', authRouter);
-app.use('/post', postRouter);
-app.use('/admin', adminRouter);
+// 🚨 하위 경로 매핑 설정 구역
+const BASE_PATH = process.env.BASE_PATH || '/stud11';
 
+app.use(`${BASE_PATH}/`, indexRouter);
+app.use(`${BASE_PATH}/shop`, shopRouter);
+app.use(`${BASE_PATH}/`, authRouter);
+app.use(`${BASE_PATH}/post`, postRouter);
+app.use(`${BASE_PATH}/admin`, adminRouter);
+
+// 기본 루트 경로 접속 시 하위 경로로 자동 리다이렉트
+app.get('/', (req, res) => {
+    res.redirect(`${BASE_PATH}/`);
+});
 
 // ==========================================================
 // 하드코딩 제거 및 환경변수 포트 스위칭
 // ==========================================================
-// 관리자가 pm2로 켤 때는 배정받은 PORT 변수를 쓰고, 내 컴퓨터 테스트 시에는 3004번을 기본값으로 작동!
 const PORT = process.env.PORT || 3004;
 
 app.listen(PORT, () => {

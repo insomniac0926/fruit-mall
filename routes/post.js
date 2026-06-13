@@ -82,7 +82,8 @@ router.post('/write', (req, res) => {
 
     db.run(query, [title, content, writer, regDate, parentId || null], (err) => {
         if (err) return res.status(500).send('글 저장 실패');
-        res.redirect('/post/list');
+        // ⭕ 리다이렉트 경로 수정
+        res.redirect('/stud11/post/list');
     });
 });
 
@@ -152,7 +153,8 @@ router.post('/reply', (req, res) => {
             console.error("답변 저장 실패 에러:", err);
             return res.status(500).send('답변 등록 실패');
         }
-        res.redirect('/post/list'); // 답변 등록 완료 후 다시 목록으로 복귀
+        // ⭕ 리다이렉트 경로 수정
+        res.redirect('/stud11/post/list'); // 답변 등록 완료 후 다시 목록으로 복귀
     });
 });
 
@@ -189,7 +191,8 @@ router.post('/edit', (req, res) => {
             console.error("글 수정 처리 에러:", err);
             return res.status(500).send('글 수정에 실패했습니다.');
         }
-        res.redirect(`/post/detail/${id}`);
+        // ⭕ 리다이렉트 경로 수정
+        res.redirect(`/stud11/post/detail/${id}`);
     });
 });
 
@@ -206,7 +209,8 @@ router.post('/delete', (req, res) => {
             console.error("글 삭제 에러:", err);
             return res.status(500).send('글 삭제 실패');
         }
-        res.redirect('/post/list');
+        // ⭕ 리다이렉트 경로 수정
+        res.redirect('/stud11/post/list');
     });
 });
 

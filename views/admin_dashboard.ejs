@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>관리자 마스터 대시보드 - 프레시 마켓</title>
-    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="/stud11/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f3f4f6; color: #111827; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #e5e7eb; }
@@ -34,18 +34,18 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓 [관리자 모드]</h1>
         <nav>
-            <a href="./">홈</a>
-            <a href="./shop/products">추천상품</a>
-            <a href="./shop/products/all">전체상품</a>
-            <a href="./shop/cart">장바구니</a>
-            <a href="./post/list">고객센터</a>
-            <a href="./admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+            <a href="/stud11/">홈</a>
+            <a href="/stud11/shop/products">추천상품</a>
+            <a href="/stud11/shop/products/all">전체상품</a>
+            <a href="/stud11/shop/cart">장바구니</a>
+            <a href="/stud11/post/list">고객센터</a>
+            <a href="/stud11/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
         </nav>
     </div>
     <div class="auth-zone">
         <span style="font-weight: bold; color: #d97706;">👑 총괄 마스터 가동 중</span> |
-        <a href="./" style="text-decoration: none; color: #4b5563; font-weight: 600;">사용자 홈 바로가기</a> |
-        <a href="./logout" style="color: #ef4444; text-decoration: none; font-weight: 600;">로그아웃</a>
+        <a href="/stud11/" style="text-decoration: none; color: #4b5563; font-weight: 600;">사용자 홈 바로가기</a> |
+        <a href="/stud11/logout" style="color: #ef4444; text-decoration: none; font-weight: 600;">로그아웃</a>
     </div>
 </header>
 
@@ -78,7 +78,7 @@
                         <% } %>
                     </td>
                     <td>
-                        <form action="./admin/product/toggle-featured" method="POST" style="display:inline;">
+                        <form action="/stud11/admin/product/toggle-featured" method="POST" style="display:inline;">
                             <input type="hidden" name="productId" value="<%= product.id %>">
                             <input type="hidden" name="currentFeatured" value="<%= product.is_featured %>">
                             <% if (product.is_featured === 1 || product.is_featured === true) { %>
@@ -123,7 +123,7 @@
                             <% } %>
                         </td>
                         <td>
-                            <form action="./admin/order/update" method="POST" style="display:inline-flex; gap: 6px;">
+                            <form action="/stud11/admin/order/update" method="POST" style="display:inline-flex; gap: 6px;">
                                 <input type="hidden" name="orderId" value="<%= order.id %>">
                                 <select name="status" style="padding: 6px; border-radius: 6px; border: 1px solid #ccc;">
                                     <option value="배송준비중" <%= order.status==='배송준비중'?'selected':'' %>>배송준비중</option>
@@ -161,7 +161,7 @@
                         <td><strong style="color: #111827;">👤 <%= u.username || u.id %></strong></td>
                         <td style="color: #6b7280;"><%= u.reg_date || '방금 가입' %></td>
                         <td>
-                            <form action="./admin/user/delete" method="POST" style="display:inline;" onsubmit="return confirm('정말로 이 회원을 강제 탈퇴시키겠습니까?');">
+                            <form action="/stud11/admin/user/delete" method="POST" style="display:inline;" onsubmit="return confirm('정말로 이 회원을 강제 탈퇴시키겠습니까?');">
                                 <input type="hidden" name="userId" value="<%= u.id %>">
                                 <button type="submit" class="btn-red">회원 삭제</button>
                             </form>

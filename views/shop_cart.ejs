@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>장바구니 - 프레시 마켓</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stud11/stylesheets/style.css">
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #f9fafb; color: #111827; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background-color: #ffffff; border-bottom: 1px solid #f3f4f6; box-sizing: border-box; width: 100%; }
         .header-left { display: flex; align-items: center; gap: 35px; }
         .header-left h1 { margin: 0; font-size: 1.4em; font-weight: 800; color: #10b981; }
-        nav { display: flex; gap: 24px; }
+
+        /* 다른 페이지와 일치하도록 align-items 추가 */
+        nav { display: flex; gap: 24px; align-items: center; }
         nav a { text-decoration: none; color: #4b5563; font-weight: 500; font-size: 0.95em; }
         nav a:hover { color: #10b981; }
+
         .auth-zone { font-size: 0.9em; display: flex; align-items: center; gap: 12px; }
         .auth-zone a { color: #4b5563; text-decoration: none; font-weight: 500; }
         .user-tag { font-weight: 600; color: #047857; background-color: #ecfdf5; padding: 4px 10px; border-radius: 20px; }
@@ -42,31 +45,30 @@
     <div class="header-left">
         <h1>🌱 프레시 마켓</h1>
         <nav>
-            <a href="/">홈</a>
-            <a href="/shop/products">추천상품</a>
-            <a href="/shop/products/all">전체상품</a>
-            <a href="/shop/cart" style="color: #10b981; font-weight: 700;">장바구니</a>
-            <a href="/post/list">고객센터</a>
+            <a href="/stud11/">홈</a>
+            <a href="/stud11/shop/products">추천상품</a>
+            <a href="/stud11/shop/products/all">전체상품</a>
+            <a href="/stud11/shop/cart" style="color: #10b981; font-weight: 700;">장바구니</a>
+            <a href="/stud11/post/list">고객센터</a>
 
             <%
-            let isAdmin = false;
-            if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { isAdmin = true; }
-            if (typeof currentUser !== 'undefined' && currentUser && (currentUser.id === 'admin' || currentUser.username === 'admin')) { isAdmin = true; }
+            let checkAdmin = false;
+            if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { checkAdmin = true; }
+            if (typeof currentUser !== 'undefined' && currentUser && (currentUser.id === 'admin' || currentUser.username === 'admin')) { checkAdmin = true; }
+            if (checkAdmin) {
             %>
-
-            <% if (isAdmin) { %>
-                <a href="/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
+                <a href="/stud11/admin" style="color: #ef4444; font-weight: 700;">👑 관리자 대시보드</a>
             <% } %>
         </nav>
     </div>
     <div class="auth-zone">
-        <% if (user) { %>
+        <% if (typeof user !== 'undefined' && user) { %>
             <span class="user-tag">👤 <%= user.username || user.id %>님</span> |
-            <a href="/mypage">마이페이지</a> |
-            <a href="/logout" style="color: #ef4444;">로그아웃</a>
+            <a href="/stud11/mypage">마이페이지</a> |
+            <a href="/stud11/logout" style="color: #ef4444;">로그아웃</a>
         <% } else { %>
-            <a href="/login">로그인</a> |
-            <a href="/register">회원가입</a>
+            <a href="/stud11/login">로그인</a> |
+            <a href="/stud11/register">회원가입</a>
         <% } %>
     </div>
 </header>
@@ -74,7 +76,7 @@
 <main>
     <div class="cart-title">🛒 내 장바구니</div>
     <div class="cart-card">
-        <% if (cartItems && cartItems.length > 0) { %>
+        <% if (typeof cartItems !== 'undefined' && cartItems && cartItems.length > 0) { %>
             <% cartItems.forEach((item, index) => { %>
                 <div class="cart-item">
                     <div class="item-left">
@@ -84,7 +86,7 @@
                             <div class="item-price"><%= item.price.toLocaleString() %>원</div>
                         </div>
                     </div>
-                    <form action="/shop/cart/remove" method="POST" style="margin: 0;">
+                    <form action="/stud11/shop/cart/remove" method="POST" style="margin: 0;">
                         <input type="hidden" name="index" value="<%= index %>">
                         <button type="submit" class="btn-remove">제거</button>
                     </form>
@@ -93,21 +95,21 @@
 
             <div class="cart-summary">
                 <span class="total-label">총 결제 예정 금액</span>
-                <span class="total-price"><%= totalPrice.toLocaleString() %>원</span>
+                <span class="total-price"><%= typeof totalPrice !== 'undefined' ? totalPrice.toLocaleString() : 0 %>원</span>
             </div>
 
-            <form action="/shop/checkout" method="POST">
+            <form action="/stud11/shop/checkout" method="POST">
                 <button type="submit" class="btn-checkout">💳 산지 직송 주문 결제하기</button>
             </form>
 
-            <% if (user && (user.id === 'admin' || user.username === 'admin')) { %>
-                <a href="/admin" class="btn-checkout" style="background-color: #ef4444; margin-top: 10px; text-decoration: none;">👑 총괄 관리자 대시보드 마스터 키 가동</a>
+            <% if (typeof user !== 'undefined' && user && (user.id === 'admin' || user.username === 'admin')) { %>
+                <a href="/stud11/admin" class="btn-checkout" style="background-color: #ef4444; margin-top: 10px; text-decoration: none;">👑 총괄 관리자 대시보드 마스터 키 가동</a>
             <% } %>
 
         <% } else { %>
             <div class="empty-cart">
                 <p>장바구니가 비어 있습니다. 신선한 과일을 담아보세요!</p>
-                <a href="/" class="btn-shop">과일 보러 가기 →</a>
+                <a href="/stud11/" class="btn-shop">과일 보러 가기 →</a>
             </div>
         <% } %>
     </div>

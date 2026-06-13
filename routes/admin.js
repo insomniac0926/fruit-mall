@@ -10,7 +10,8 @@ function isAdmin(req, res, next) {
     if (req.session.user && (req.session.user.id === 'admin' || req.session.user.username === 'admin')) {
         return next();
     }
-    return res.send('<script>alert("관리자만 접근 가능합니다."); location.href="/login";</script>');
+    // ⭕ 관리자 아닐 때 로그인 페이지로 튕기는 주소 수정 (/login -> /stud11/login)
+    return res.send('<script>alert("관리자만 접근 가능합니다."); location.href="/stud11/login";</script>');
 }
 
 router.get('/', isAdmin, (req, res) => {
@@ -42,14 +43,16 @@ router.post('/product/toggle-featured', isAdmin, (req, res) => {
 
     db.run('UPDATE products SET is_featured = ? WHERE id = ?', [newFeatured, productId], (err) => {
         if (err) console.error(err);
-        res.redirect('/admin');
+        // ⭕ 리다이렉트 주소 수정 (/admin -> /stud11/admin)
+        res.redirect('/stud11/admin');
     });
 });
 
 router.post('/order/update', isAdmin, (req, res) => {
     const { orderId, status } = req.body;
     db.run('UPDATE orders SET status = ? WHERE id = ?', [status, orderId], (err) => {
-        res.redirect('/admin');
+        // ⭕ 리다이렉트 주소 수정 (/admin -> /stud11/admin)
+        res.redirect('/stud11/admin');
     });
 });
 
@@ -58,13 +61,15 @@ router.post('/user/delete', isAdmin, (req, res) => {
     const { userId } = req.body;
 
     if (!userId) {
-        return res.redirect('/admin');
+        // ⭕ 리다이렉트 주소 수정 (/admin -> /stud11/admin)
+        return res.redirect('/stud11/admin');
     }
 
     // 화면에 띄울 때 사용했던 고유 id 키값 대입하여 완벽하게 데이터 매칭 물리 삭제
     db.run('DELETE FROM users WHERE id = ?', [userId], (err) => {
         if (err) console.error("물리 삭제 실패:", err);
-        res.redirect('/admin');
+        // ⭕ 리다이렉트 주소 수정 (/admin -> /stud11/admin)
+        res.redirect('/stud11/admin');
     });
 });
 

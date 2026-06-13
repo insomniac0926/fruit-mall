@@ -26,7 +26,8 @@ router.get('/', function(req, res) {
 // 2. 마이페이지 화면 이동 라우터
 router.get('/mypage', (req, res) => {
   if (!req.session.user) {
-    return res.send('<script>alert("로그인이 필요합니다."); location.href="/login";</script>');
+    // ⭕ 로그인 필요 시 이동 경로 수정
+    return res.send('<script>alert("로그인이 필요합니다."); location.href="/stud11/login";</script>');
   }
   const cartCount = req.session.cartItems ? req.session.cartItems.length : 0;
 
@@ -43,7 +44,8 @@ router.post('/mypage/change-password', (req, res) => {
 
   // 로그인 세션 풀림 방어 가드
   if (!user) {
-    return res.send('<script>alert("로그인이 만료되었습니다."); location.href="/login";</script>');
+    // ⭕ 로그인 만료 시 이동 경로 수정
+    return res.send('<script>alert("로그인이 만료되었습니다."); location.href="/stud11/login";</script>');
   }
 
   const userId = user.id || user.username;
@@ -64,7 +66,8 @@ router.post('/mypage/change-password', (req, res) => {
         return res.send('<script>alert("비밀번호 변경 중 오류가 발생했습니다."); history.back();</script>');
       }
 
-      res.send('<script>alert("비밀번호가 안전하게 변경되었습니다!"); location.href="/mypage";</script>');
+      // ⭕ 비밀번호 변경 완료 후 이동 경로 수정
+      res.send('<script>alert("비밀번호가 안전하게 변경되었습니다!"); location.href="/stud11/mypage";</script>');
     });
   });
 });
