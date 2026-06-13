@@ -38,6 +38,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// ⭕ 학교 프록시 환경에서 CSS, 이미지 정적 파일이 깨지지 않도록 두 경로 모두 지원
+app.use('/stud11', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 🔐 세션 미들웨어 설정
@@ -55,19 +58,22 @@ const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const adminRouter = require('./routes/admin');
 
-// 🚨 하위 경로 매핑 설정 구역
-const BASE_PATH = process.env.BASE_PATH || '/stud11';
+// ==========================================================
+// 🌟 무한 루프 탈출 핵심 가드: /와 /stud11 둘 다 라우터 작동 보장
+// ==========================================================
+// 1. 프록시 서버가 /stud11을 떼고 그냥 /로 신호를 보낼 때 대응
+app.use('/', indexRouter);
+app.use('/shop', shopRouter);
+app.use('/', authRouter);
+app.use('/post', postRouter);
+app.use('/admin', adminRouter);
 
-app.use(`${BASE_PATH}/`, indexRouter);
-app.use(`${BASE_PATH}/shop`, shopRouter);
-app.use(`${BASE_PATH}/`, authRouter);
-app.use(`${BASE_PATH}/post`, postRouter);
-app.use(`${BASE_PATH}/admin`, adminRouter);
-
-// 기본 루트 경로 접속 시 하위 경로로 자동 리다이렉트
-app.get('/', (req, res) => {
-    res.redirect(`${BASE_PATH}/`);
-});
+// 2. 외부 브라우저 탭 링크 클릭 시 /stud11 주소로 직접 찾아 들어올 때 대응
+app.use('/stud11', indexRouter);
+app.use('/stud11/shop', shopRouter);
+app.use('/stud11', authRouter);
+app.use('/stud11/post', postRouter);
+app.use('/stud11/admin', adminRouter);
 
 // ==========================================================
 // 하드코딩 제거 및 환경변수 포트 스위칭
